@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POS Ayam Bakar Sederhana</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #b45309;
+      --accent-soft: #fef3c7;
+      --text: #1f2937;
+      --danger: #b91c1c;
+      --ok: #166534;
+      --line: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, #92400e, #b45309);
+      color: white;
+      padding: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 18px auto;
+      padding: 0 12px 24px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.04);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    input, select, button {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px;
+      font-size: .95rem;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    button.secondary {
+      background: #374151;
+    }
+
+    button.danger {
+      background: var(--danger);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 8px 6px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { background: #f9fafb; }
+
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: .78rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: #92400e;
+    }
+
+    .stock-warning {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .summary-box {
+      border: 1px dashed #d1d5db;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      background: #f9fafb;
+    }
+
+    .ok { color: var(--ok); font-weight: 700; }
+    .muted { color: #6b7280; }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .actions button {
+      margin-top: 0;
+      font-size: .8rem;
+      padding: 7px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Point of Sale Ayam Bakar</h1>
+    <p>Kelola produk, stok, dan transaksi penjualan secara sederhana.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Tambah Produk</h2>
+      <form id="productForm">
+        <label for="productName">Nama Produk</label>
+        <input id="productName" required placeholder="Contoh: Ayam Bakar Jumbo" />
+
+        <div class="row">
+          <div>
+            <label for="productPrice">Harga (Rp)</label>
+            <input id="productPrice" type="number" min="1" required placeholder="25000" />
+          </div>
+          <div>
+            <label for="productStock">Stok Awal</label>
+            <input id="productStock" type="number" min="0" required placeholder="20" />
+          </div>
+        </div>
+
+        <button type="submit">Simpan Produk</button>
+      </form>
+
+      <h2 style="margin-top:18px;">Produk & Stok</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Produk</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody"></tbody>
+      </table>
+      <p id="emptyProducts" class="muted">Belum ada produk.</p>
+    </section>
+
+    <section class="card">
+      <h2>Transaksi Penjualan</h2>
+      <form id="saleForm">
+        <label for="saleProduct">Pilih Produk</label>
+        <select id="saleProduct" required></select>
+
+        <label for="saleQty">Jumlah Beli</label>
+        <input id="saleQty" type="number" min="1" required placeholder="1" />
+
+        <button type="submit">Proses Penjualan</button>
+      </form>
+
+      <div class="summary-box">
+        <div>Total transaksi hari ini: <span id="totalTransactions" class="pill">0</span></div>
+        <div style="margin-top:6px;">Total omzet: <span id="totalRevenue" class="ok">Rp 0</span></div>
+      </div>
+
+      <h2 style="margin-top:18px;">Riwayat Transaksi</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Waktu</th>
+            <th>Produk</th>
+            <th>Qty</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="salesTableBody"></tbody>
+      </table>
+      <p id="emptySales" class="muted">Belum ada transaksi.</p>
+      <button id="resetData" class="danger" type="button">Reset Semua Data</button>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "pos_ayam_bakar_data_v1";
+    const LOW_STOCK_THRESHOLD = 5;
+
+    const productForm = document.getElementById("productForm");
+    const saleForm = document.getElementById("saleForm");
+    const productTableBody = document.getElementById("productTableBody");
+    const salesTableBody = document.getElementById("salesTableBody");
+    const emptyProducts = document.getElementById("emptyProducts");
+    const emptySales = document.getElementById("emptySales");
+    const saleProduct = document.getElementById("saleProduct");
+    const totalTransactions = document.getElementById("totalTransactions");
+    const totalRevenue = document.getElementById("totalRevenue");
+    const resetDataButton = document.getElementById("resetData");
+
+    const state = loadData();
+
+    function loadData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return { products: [], sales: [] };
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return { products: [], sales: [] };
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function toRupiah(number) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0,
+      }).format(number);
+    }
+
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    }
+
+    function renderProducts() {
+      productTableBody.innerHTML = "";
+      saleProduct.innerHTML = "";
+
+      if (state.products.length === 0) {
+        emptyProducts.style.display = "block";
+        saleProduct.innerHTML = `<option value="">Belum ada produk</option>`;
+      } else {
+        emptyProducts.style.display = "none";
+      }
+
+      state.products.forEach((product) => {
+        const tr = document.createElement("tr");
+        const stockClass = product.stock <= LOW_STOCK_THRESHOLD ? "stock-warning" : "";
+
+        tr.innerHTML = `
+          <td><strong>${product.name}</strong></td>
+          <td>${toRupiah(product.price)}</td>
+          <td class="${stockClass}">${product.stock}</td>
+          <td>
+            <div class="actions">
+              <button class="secondary" type="button" data-action="add-stock" data-id="${product.id}">+ Stok</button>
+              <button class="danger" type="button" data-action="delete" data-id="${product.id}">Hapus</button>
+            </div>
+          </td>
+        `;
+
+        productTableBody.appendChild(tr);
+
+        const option = document.createElement("option");
+        option.value = product.id;
+        option.textContent = `${product.name} (Stok: ${product.stock})`;
+        saleProduct.appendChild(option);
+      });
+    }
+
+    function renderSales() {
+      salesTableBody.innerHTML = "";
+
+      if (state.sales.length === 0) {
+        emptySales.style.display = "block";
+      } else {
+        emptySales.style.display = "none";
+      }
+
+      state.sales
+        .slice()
+        .reverse()
+        .forEach((sale) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${new Date(sale.timestamp).toLocaleString("id-ID")}</td>
+            <td>${sale.productName}</td>
+            <td>${sale.qty}</td>
+            <td>${toRupiah(sale.total)}</td>
+          `;
+          salesTableBody.appendChild(tr);
+        });
+    }
+
+    function renderSummary() {
+      const omzet = state.sales.reduce((sum, sale) => sum + sale.total, 0);
+      totalTransactions.textContent = state.sales.length;
+      totalRevenue.textContent = toRupiah(omzet);
+    }
+
+    function renderAll() {
+      renderProducts();
+      renderSales();
+      renderSummary();
+    }
+
+    productForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = document.getElementById("productName").value.trim();
+      const price = Number(document.getElementById("productPrice").value);
+      const stock = Number(document.getElementById("productStock").value);
+
+      if (!name || price <= 0 || stock < 0) {
+        alert("Input produk tidak valid.");
+        return;
+      }
+
+      state.products.push({ id: generateId(), name, price, stock });
+      saveData();
+      productForm.reset();
+      renderAll();
+    });
+
+    productTableBody.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLButtonElement)) return;
+
+      const id = target.dataset.id;
+      const action = target.dataset.action;
+      const product = state.products.find((item) => item.id === id);
+      if (!product) return;
+
+      if (action === "delete") {
+        const ok = confirm(`Hapus produk ${product.name}?`);
+        if (!ok) return;
+        state.products = state.products.filter((item) => item.id !== id);
+      }
+
+      if (action === "add-stock") {
+        const qty = Number(prompt(`Tambah stok untuk ${product.name}:`, "1"));
+        if (Number.isNaN(qty) || qty <= 0) {
+          alert("Jumlah stok tidak valid.");
+          return;
+        }
+        product.stock += qty;
+      }
+
+      saveData();
+      renderAll();
+    });
+
+    saleForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const productId = saleProduct.value;
+      const qty = Number(document.getElementById("saleQty").value);
+      const product = state.products.find((item) => item.id === productId);
+
+      if (!product) {
+        alert("Pilih produk terlebih dahulu.");
+        return;
+      }
+
+      if (qty <= 0 || Number.isNaN(qty)) {
+        alert("Jumlah beli tidak valid.");
+        return;
+      }
+
+      if (qty > product.stock) {
+        alert(`Stok ${product.name} tidak cukup. Sisa stok: ${product.stock}`);
+        return;
+      }
+
+      product.stock -= qty;
+      const total = qty * product.price;
+      state.sales.push({
+        id: generateId(),
+        timestamp: Date.now(),
+        productId: product.id,
+        productName: product.name,
+        qty,
+        total,
+      });
+
+      saveData();
+      saleForm.reset();
+      renderAll();
+    });
+
+    resetDataButton.addEventListener("click", () => {
+      const ok = confirm("Yakin reset semua data produk dan transaksi?");
+      if (!ok) return;
+
+      state.products = [];
+      state.sales = [];
+      saveData();
+      renderAll();
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
