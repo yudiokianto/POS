@@ -4,12 +4,12 @@ Aplikasi Point of Sale sederhana berbasis HTML, CSS, dan JavaScript untuk memban
 
 ## Fitur
 
-- Kelola master customer (tambah customer, simpan nama & nomor HP, hapus customer yang belum pernah dipakai transaksi).
-- Tambah produk (nama, harga, stok awal).
-- Kelola stok produk (tambah stok, hapus produk).
-- Proses transaksi penjualan berdasarkan customer dan produk.
+- Layout dengan **side panel** untuk navigasi antar halaman.
+- Halaman **Data Customer** untuk tambah dan kelola customer.
+- Halaman **Stok Produk** untuk tambah produk, lihat stok, tambah stok, dan hapus produk.
+- Halaman **Proses Penjualan** untuk transaksi berdasarkan customer + produk.
 - Validasi stok agar penjualan tidak melebihi stok tersedia.
-- Riwayat transaksi lengkap (waktu, customer, produk, qty, total) dan ringkasan omzet.
+- Riwayat transaksi dan ringkasan total omzet.
 - Penyimpanan data lokal menggunakan `localStorage`.
 
 ## Cara Menjalankan
