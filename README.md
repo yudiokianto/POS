@@ -1,10 +1,10 @@
 # POS Sederhana Ayam Bakar
 
-Aplikasi Point of Sale sederhana berbasis HTML, CSS, dan JavaScript untuk membantu usaha ayam bakar.
+Aplikasi Point of Sale berbasis HTML, CSS, dan JavaScript untuk membantu usaha ayam bakar dengan tampilan modern.
 
 ## Fitur
 
-- Layout dengan **side panel** untuk navigasi antar halaman.
+- Desain **modern dashboard** dengan side panel, kartu statistik, dan komponen form yang lebih clean.
 - Halaman **Data Customer** untuk tambah dan kelola customer.
 - Halaman **Stok Produk** untuk tambah produk, lihat stok, tambah stok, dan hapus produk.
 - Halaman **Proses Penjualan** untuk transaksi berdasarkan customer + produk.

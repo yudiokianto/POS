@@ -6,24 +6,25 @@
   <title>POS Ayam Bakar</title>
   <style>
     :root {
-      --bg: #f3f4f6;
+      --bg: #f8fafc;
       --card: #ffffff;
-      --line: #e5e7eb;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --brand: #b45309;
-      --brand-strong: #92400e;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #64748b;
+      --brand: #ea580c;
+      --brand-strong: #c2410c;
       --danger: #b91c1c;
       --ok: #166534;
+      --shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      background: var(--bg);
+      background: radial-gradient(circle at top right, #fff7ed, var(--bg) 34%);
     }
 
     .layout {
@@ -33,21 +34,23 @@
     }
 
     .sidebar {
-      background: linear-gradient(180deg, var(--brand-strong), var(--brand));
+      background: linear-gradient(180deg, #7c2d12, var(--brand-strong));
       color: #fff;
-      padding: 20px 16px;
+      padding: 24px 16px;
       position: sticky;
       top: 0;
       height: 100vh;
+      box-shadow: var(--shadow);
     }
 
     .brand-title {
       margin: 0;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      letter-spacing: .3px;
     }
 
     .brand-subtitle {
-      margin: 6px 0 18px;
+      margin: 8px 0 22px;
       font-size: .9rem;
       opacity: .95;
     }
@@ -59,14 +62,20 @@
     }
 
     .menu button {
-      border: 1px solid rgba(255,255,255,.25);
-      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
       color: #fff;
       text-align: left;
-      padding: 10px 12px;
-      border-radius: 10px;
+      padding: 12px;
+      border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .menu button:hover {
+      background: rgba(255,255,255,.14);
+      transform: translateX(2px);
     }
 
     .menu button.active {
@@ -76,7 +85,37 @@
     }
 
     main {
-      padding: 18px;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .kpi {
+      background: linear-gradient(135deg, #fff, #fff7ed);
+      border: 1px solid #fed7aa;
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 18px rgba(234, 88, 12, .12);
+    }
+
+    .kpi-title {
+      margin: 0 0 6px;
+      color: #9a3412;
+      font-size: .82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    .kpi-value {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 800;
     }
 
     .page { display: none; }
@@ -85,13 +124,17 @@
     .card {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
-      box-shadow: 0 4px 10px rgba(0,0,0,.04);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
       margin-bottom: 14px;
     }
 
-    h2 { margin-top: 0; }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
 
     label {
       display: block;
@@ -102,36 +145,50 @@
 
     input, select, button {
       width: 100%;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px;
       font-size: .95rem;
+      background: #fff;
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid #fed7aa;
+      border-color: #fb923c;
     }
 
     .row { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
 
     .btn {
       border: none;
-      background: var(--brand);
+      background: linear-gradient(135deg, #f97316, var(--brand));
       color: #fff;
       font-weight: 700;
       cursor: pointer;
       margin-top: 10px;
+      box-shadow: 0 8px 16px rgba(234, 88, 12, .22);
     }
 
-    .btn.secondary { background: #374151; }
-    .btn.danger { background: var(--danger); }
+    .btn.secondary { background: linear-gradient(135deg, #475569, #334155); }
+    .btn.danger { background: linear-gradient(135deg, #dc2626, var(--danger)); }
 
     table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-    th, td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; }
-    th { background: #f9fafb; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: left; }
+    th { background: #f8fafc; color: #334155; }
 
     .actions { display: flex; gap: 8px; }
     .actions .btn { margin-top: 0; padding: 7px; font-size: .8rem; }
 
     .muted { color: var(--muted); }
     .stock-warning { color: var(--danger); font-weight: 700; }
-    .summary { border: 1px dashed #d1d5db; padding: 10px; border-radius: 10px; }
+    .summary {
+      border: 1px dashed #fdba74;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff7ed;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
     .ok { color: var(--ok); font-weight: 700; }
 
     @media (max-width: 900px) {
@@ -150,7 +207,7 @@
   <div class="layout">
     <aside class="sidebar">
       <h1 class="brand-title">POS Ayam Bakar</h1>
-      <p class="brand-subtitle">Side panel menu halaman</p>
+      <p class="brand-subtitle">POS modern untuk usaha ayam bakar</p>
       <nav class="menu" id="menuNav">
         <button class="active" data-page="customerPage" type="button">Data Customer</button>
         <button data-page="productPage" type="button">Stok Produk</button>
@@ -159,6 +216,25 @@
     </aside>
 
     <main>
+      <section class="topbar">
+        <article class="kpi">
+          <p class="kpi-title">Total Customer</p>
+          <p class="kpi-value" id="kpiCustomers">0</p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-title">Jumlah Produk</p>
+          <p class="kpi-value" id="kpiProducts">0</p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-title">Total Transaksi</p>
+          <p class="kpi-value" id="totalTransactions">0</p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-title">Omzet</p>
+          <p class="kpi-value ok" id="totalRevenue">Rp 0</p>
+        </article>
+      </section>
+
       <section id="customerPage" class="page active">
         <div class="card">
           <h2>Data Customer</h2>
@@ -245,8 +321,7 @@
           </form>
 
           <div class="summary">
-            <div>Total transaksi: <strong id="totalTransactions">0</strong></div>
-            <div>Total omzet: <span id="totalRevenue" class="ok">Rp 0</span></div>
+            Ringkasan transaksi dapat dipantau pada kartu statistik di bagian atas.
           </div>
         </div>
 
@@ -292,6 +367,8 @@
 
     const saleCustomer = document.getElementById("saleCustomer");
     const saleProduct = document.getElementById("saleProduct");
+    const kpiCustomers = document.getElementById("kpiCustomers");
+    const kpiProducts = document.getElementById("kpiProducts");
     const totalTransactions = document.getElementById("totalTransactions");
     const totalRevenue = document.getElementById("totalRevenue");
     const resetDataButton = document.getElementById("resetData");
@@ -426,6 +503,8 @@
 
     function renderSummary() {
       const omzet = state.sales.reduce((sum, sale) => sum + sale.total, 0);
+      kpiCustomers.textContent = state.customers.length;
+      kpiProducts.textContent = state.products.length;
       totalTransactions.textContent = state.sales.length;
       totalRevenue.textContent = toRupiah(omzet);
     }
